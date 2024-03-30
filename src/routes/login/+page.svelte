@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { applyAction, enhance } from "$app/forms";
   import type { ActionResult } from "@sveltejs/kit";
   import { Spinner } from "flowbite-svelte";
@@ -10,23 +11,33 @@
   const handleSubmit = () => {
     state = "loading";
     return async ({ result }: { result: ActionResult }) => {
-      switch (result.type) {
-        case "success":
-          if (result.data?.email) {
-            state = { email: result.data.email };
-          } else {
-            state = "idle";
-          }
-          break;
-        case "failure":
-          if (result.data?.email) {
-            state = new Error(result.data.error);
+      if (browser) {
+        switch (result.type) {
+          case "success":
+            if (result.data?.email) {
+              state = { email: result.data.email };
+            } else {
+              state = "idle";
+            }
             break;
-          } else {
-            state = new Error("something went wrong sending your magic link");
-          }
-        default:
-          state = "idle";
+
+          case "failure":
+            // check if reason was because email was not associated with account
+            if (
+              result.data?.error === "No account associated with this email."
+            ) {
+              window.location.href = "/register"; // Redirect to the registration page
+              return; // Exit early
+            } else if (result.data?.email) {
+              state = new Error(result.data.error);
+              break;
+            } else {
+              state = new Error("something went wrong sending your magic link");
+            }
+
+          default:
+            state = "idle";
+        }
       }
       await applyAction(result);
     };

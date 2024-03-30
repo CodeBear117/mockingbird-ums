@@ -2,6 +2,7 @@
   import "../app.css";
   import Logo from "$lib/logo.svelte";
   import { GradientButton } from "flowbite-svelte";
+  import { redirect } from "@sveltejs/kit";
 
   export let data;
   let { supabase } = data;
@@ -9,9 +10,8 @@
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    window.location.href = "/"; // redirect the user to landing
   };
-
-  // <button on:click={handleSignOut} class="text-white"> logout </button>
 </script>
 
 <header class="bg-slate-800">

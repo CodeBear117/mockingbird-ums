@@ -37,10 +37,14 @@ export const actions: Actions = {
       .select('*')
       .eq('email', email)
 
-    // if not, return error
-    if (userError || !userData) {
+    // if user does not exist, return error and redirect to registration page
+    if (!userError || userData.length === 0) {
       console.error('User does not exist in database:', userError?.message);
-      return fail(403, { message: 'No account associated with this email.' });
+      redirect(303, '/register')
+      // if another error, print error
+    } else if (userError) {
+      console.error('Error querying database:', userError.message);
+      //return fail(403, { message: 'No account associated with this email.' });
     };
 
     // if userData exists for the attempted email, then send to Supabase for Auth
