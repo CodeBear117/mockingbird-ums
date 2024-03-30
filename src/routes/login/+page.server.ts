@@ -1,13 +1,20 @@
 import type { Actions, PageServerLoad } from './$types'
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
+import z from 'zod';
 
-import z from 'zod'  
-export const load: PageServerLoad = async () => ({
-  meta: {
-    title: 'Login',
-    description: 'Login to the Mockingbird-ums'
-  },
-})
+export const load: PageServerLoad = async ({locals: {getSession}}) => {
+  const session = await getSession()
+  // if you are already in a session, redirect to the dashboard
+  if (session) {
+    redirect(303, '/dashboard')
+  }
+  return {
+    meta: {
+      title: 'Login',
+      description: 'Login to the Mockingbird-ums'
+    },
+  }
+}
 
 // validation
 const MagicLoginSchema = z.string().email()

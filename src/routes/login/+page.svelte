@@ -1,27 +1,36 @@
 <script lang="ts">
   import { applyAction, enhance } from "$app/forms";
   import type { ActionResult } from "@sveltejs/kit";
+  import { Spinner } from "flowbite-svelte";
 
-  let emailSentTo: string | null = null;
-  let error: string | null = null;
+  // loading
+  type State = "idle" | "loading" | { email: string } | Error;
+  let state: State = "idle";
 
-  const handleSuccess = async ({ result }: { result: ActionResult }) => {
-    switch (result.type) {
-      case "success":
-        if (result.data?.email) {
-          emailSentTo = result.data.email;
-        }
-        break;
-      case "failure":
-        if (result.data?.email) {
-          error = result.data.error;
+  const handleSubmit = () => {
+    state = "loading";
+    return async ({ result }: { result: ActionResult }) => {
+      switch (result.type) {
+        case "success":
+          if (result.data?.email) {
+            state = { email: result.data.email };
+          } else {
+            state = "idle";
+          }
           break;
-        }
-    }
-    await applyAction(result);
+        case "failure":
+          if (result.data?.email) {
+            state = new Error(result.data.error);
+            break;
+          } else {
+            state = new Error("something went wrong sending your magic link");
+          }
+        default:
+          state = "idle";
+      }
+      await applyAction(result);
+    };
   };
-
-  const handleSubmit = () => handleSuccess;
 </script>
 
 <main>
@@ -32,16 +41,18 @@
       <span>email</span>
       <input type="email" name="email" placeholder="Your Email" required />
     </label>
-    <button>Send magic link</button>
-    {#if emailSentTo}
+    <button>send magic link</button>
+    {#if state instanceof Error}
       <div>
-        We sent an email to {emailSentTo} - Check your Inbox!
+        {state.message}
       </div>
-    {/if}
-    {#if error}
+    {:else if typeof state === "object" && state.email}
       <div>
-        {error}
+        We sent an email to {state.email} - Check your Inbox!
       </div>
+    {:else if state === "loading"}
+      <Spinner size="8" />
     {/if}
   </form>
+  <p>Not a user? Register <a href="/register" class="underline">here</a></p>
 </main>

@@ -27,6 +27,8 @@
 	"dependencies": {
 		"@supabase/ssr": "^0.1.0",
 		"@supabase/supabase-js": "^2.41.1",
+		"flowbite": "^2.3.0",
+		"flowbite-svelte": "^0.44.24",
 		"zod": "^3.22.4"
 	}
 }
