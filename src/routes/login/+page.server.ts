@@ -4,7 +4,7 @@ import z from 'zod';
 
 export const load: PageServerLoad = async ({locals: {getSession}}) => {
   const session = await getSession()
-  // if you are already in a session, redirect to the dashboard
+  // if you are already in an authenticated session, redirect to the dashboard
   if (session) {
     redirect(303, '/dashboard')
   }
@@ -31,18 +31,19 @@ export const actions: Actions = {
 
     const email = validation.data;
 
+    // check if the inputted email exists in the db already
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('*')
       .eq('email', email)
-      .single();
 
+    // if not, return error
     if (userError || !userData) {
       console.error('User does not exist in database:', userError?.message);
-      // Handle the case where the user is not found, perhaps by returning an error
       return fail(403, { message: 'No account associated with this email.' });
     };
 
+    // if userData exists for the attempted email, then send to Supabase for Auth
     const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
@@ -52,10 +53,12 @@ export const actions: Actions = {
         },
     });
 
+    // handle error of link not sending
     if(error) {
         return fail(500, { message: 'Did not send magic link'})
     }
 
+    // else, return the email
     return { email };
   }
 }
