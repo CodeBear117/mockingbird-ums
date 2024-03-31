@@ -28,7 +28,8 @@ export const actions: Actions = {
     if (!validation.success) {
         return fail(400, { message: 'invalid email' })
     };
-
+    
+    // use email to query db
     const email = validation.data;
 
     // check if the inputted email exists in the db already
@@ -37,18 +38,22 @@ export const actions: Actions = {
       .select('*')
       .eq('email', email)
 
-    // if user does not exist, return error and redirect to registration page
-    if (!userError || userData.length === 0) {
-      console.error('User does not exist in database:', userError?.message);
-      redirect(303, '/register')
-      // if another error, print error
-    } else if (userError) {
-      console.error('Error querying database:', userError.message);
-      //return fail(403, { message: 'No account associated with this email.' });
-    };
+      // check user data
+      console.log(`serverside login check formData: ${formData}`)
+      console.log(`serverside login check userData: ${userData}`)
+
+      // handle errors
+      if (userError) {
+        console.error('Error querying database:', userError.message);
+        return fail(403, { message: 'No account associated with this email.' });
+      }
+      // if user does not exist in the DB, redirect to registration page
+      else if (!userData || userData.length === 0) {
+        //redirect(303, '/register')
+      };
 
     // if userData exists for the attempted email, then send to Supabase for Auth
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error: signInError } = await supabase.auth.signInWithOtp({
         email,
         options: {
           // set this to false if you do not want the user to be automatically signed up
@@ -58,8 +63,9 @@ export const actions: Actions = {
     });
 
     // handle error of link not sending
-    if(error) {
-        return fail(500, { message: 'Did not send magic link'})
+    if(signInError) {
+        console.error('Error signing in:', signInError.message);
+        return fail(500, { message: signInError.message})
     }
 
     // else, return the email

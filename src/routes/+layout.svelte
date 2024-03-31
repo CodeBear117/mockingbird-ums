@@ -16,7 +16,7 @@
 
 <header class="bg-slate-800">
   <nav
-    class="flex items-center justify-between border-b border-border h-[60px] px-4 py-2"
+    class="flex items-center justify-between border-b border-border border-slate-600 h-[60px] px-4 py-2"
   >
     <Logo />
     <div class="flex gap-4 items-center">
