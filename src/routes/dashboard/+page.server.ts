@@ -18,11 +18,17 @@ export const load: PageServerLoad = async ({locals: {getSession, supabase}}) => 
     throw new Error('Failed to fetch users');
   }
 
+  // Also fetch the name of the currently logged in user
+  const userEmail = session.user.email;
+  const loggedInUser = users.find(user => user.email === userEmail);
+  const userName = loggedInUser.name;
+
   return ({
     meta: {
       title: 'Dashboard',
       description: 'Mockingbird-ums Dashboard'
     },
     users, // Pass the users data to the client-side
+    userName, // Pass the logged-in user's name to the client-side
   })
 }

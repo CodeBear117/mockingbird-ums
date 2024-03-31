@@ -1,5 +1,5 @@
 <script lang="ts">
-  //export let data;
+  // receive data from server and assign types
   export let data: {
     users: Array<{
       id: string;
@@ -7,8 +7,10 @@
       email: string;
       created_at: string;
     }>;
+    userName: string;
   };
 
+  // flowbite-svelte is an opensource provider of frontend assets
   import {
     Table,
     TableBody,
@@ -19,17 +21,17 @@
     TableSearch,
   } from "flowbite-svelte";
 
+  // configure search functionality based on Name
   let searchTerm = "";
   $: filteredItems = data.users.filter(
     (user) => user.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
   );
 </script>
 
-<main>
-  <p>Welcome to the Dashboard</p>
+<main class="px-10 mt-10">
+  <p>Welcome, {data.userName}</p>
   {#if data.users && data.users.length > 0}
-    <h2>User List:</h2>
-    <Table striped={true} color="purple">
+    <Table striped={true}>
       <TableSearch
         placeholder="Search"
         hoverable={true}
