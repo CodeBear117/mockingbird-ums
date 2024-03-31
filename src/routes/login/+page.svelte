@@ -44,49 +44,52 @@
   };
 </script>
 
-<main>
-  <div class="min-h-screen bg-slate-900 flex flex-col justify-center">
-    <div class="max-w-md w-full mx-auto">
-      <div class="bg-white p-8 border border-gray-300 rounded-lg">
-        <h1
-          class="font-bold text-3xl bg-gradient-to-r from-green-400 to-cyan-400 text-transparent bg-clip-text mb-3"
-        >
-          Login
-        </h1>
-        <p class="mb-4">
-          Not a user? Register <a href="/register" class="underline">here</a>
-        </p>
-        <form
-          method="POST"
-          use:enhance={handleSubmit}
-          class="flex flex-col justify-center"
-        >
-          <label>
-            <input
-              class="py-1 border rounded-lg text-center w-full mb-3"
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              required
-            />
-          </label>
-          <button
-            class="bg-gradient-to-r from-green-400 to-cyan-400 py-2 border rounded-lg hover:from-cyan-400 hover:to-green-400 text-white"
-            >send magic link</button
-          >
-          {#if state instanceof Error}
-            <div>
-              {state.message}
-            </div>
-          {:else if typeof state === "object" && state.email}
-            <div>
-              We sent an email to {state.email} - Check your Inbox!
-            </div>
-          {:else if state === "loading"}
-            <Spinner size="8" />
-          {/if}
-        </form>
-      </div>
-    </div>
+<main
+  class="flex flex-col justify-center items-center w-full grow bg-slate-900"
+>
+  <div
+    class="bg-slate-800 p-8 border border-slate-600 rounded-lg w-[90%] sm:w-[40%]"
+  >
+    <h1
+      class="font-bold text-3xl bg-gradient-to-r from-green-400 to-cyan-400 text-transparent bg-clip-text mb-3"
+    >
+      Login
+    </h1>
+    <p class="mb-4 text-slate-400">
+      Not a user? Register <a
+        href="/register"
+        class="underline hover:text-teal-400">here</a
+      >
+    </p>
+    <form
+      method="POST"
+      use:enhance={handleSubmit}
+      class="flex flex-col justify-center"
+    >
+      <input
+        class="py-1 border rounded-lg text-center w-full mb-3"
+        type="email"
+        name="email"
+        placeholder="Your Email"
+        required
+      />
+      <button
+        class="bg-gradient-to-r from-green-400 to-cyan-400 py-2 border-0 rounded-lg hover:from-cyan-400 hover:to-green-400 text-white"
+        >Send magic link!</button
+      >
+      {#if state instanceof Error}
+        <div>
+          {state.message}
+        </div>
+      {:else if typeof state === "object" && state.email}
+        <div class="text-teal-400 pt-2">
+          We sent an email to {state.email} - Check your Inbox!
+        </div>
+      {:else if state === "loading"}
+        <div class="pt-4">
+          <Spinner size="8" color="green" />
+        </div>
+      {/if}
+    </form>
   </div>
 </main>

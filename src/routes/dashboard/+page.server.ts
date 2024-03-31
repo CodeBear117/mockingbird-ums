@@ -10,8 +10,8 @@ export const load: PageServerLoad = async ({locals: {getSession, supabase}}) => 
 
   // Fetch all users from the database
   const { data: users, error } = await supabase
-    .from('users') // Replace 'users' with your actual user table name
-    .select('*'); // Selects all columns
+    .from('users')
+    .select('*');
 
   if (error) {
     console.error('Error fetching users:', error);
@@ -21,6 +21,13 @@ export const load: PageServerLoad = async ({locals: {getSession, supabase}}) => 
   // Also fetch the name of the currently logged in user
   const userEmail = session.user.email;
   const loggedInUser = users.find(user => user.email === userEmail);
+
+  // handle type error on 'name' - developement only - remove block when registration works
+  if (!loggedInUser) {
+    console.error('Logged-in user not found in the database');
+    throw new Error('Logged-in user not found');
+  }
+
   const userName = loggedInUser.name;
 
   return ({
