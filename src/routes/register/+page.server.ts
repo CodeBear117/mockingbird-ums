@@ -34,14 +34,15 @@ export const actions: Actions = {
     };
 
     const { email, name} = validation.data;
- 
+
     // query db
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('*')
+      .select('email')
       .eq('email', email) // filter results where email in db equals email from form
-    
-    console.log(userData)
+
+      // should return an email if it matched with one in the db
+      console.log(userData, userData?.length)
     
       // handle errors
       if (userError) {
@@ -51,7 +52,7 @@ export const actions: Actions = {
 
       // if user already exists (based on email query above)
       if (userData.length > 0) {
-        return fail(400, { message: 'User already exists. Please login.' });
+        return fail(409, { message: 'User already exists. Please login.' });
       };
     
     // OPTION 2 - SIGN UP WITH OTP
@@ -67,14 +68,14 @@ export const actions: Actions = {
     // If there's an error with signing up, return an appropriate response
     if (signUpError) {
       console.error('Error signing up:', signUpError.message);
-      return fail(409, { message: signUpError.message });
+      return fail(500, { message: signUpError.message });
     };
     
     const { error: PostgrestError } = await supabase
     .from('users')
-    .insert([
+    .insert(
       { name: name, email: email},
-    ])
+    )
 
     if (PostgrestError) {
       console.error('Error signing up:', PostgrestError.message);

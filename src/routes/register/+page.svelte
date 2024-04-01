@@ -28,18 +28,21 @@
 
           case "failure":
             // return error if email associated with existing account
+            if (result.status === 500) {
+              state = new Error("500 - Error signing up");
+            }
             if (result.status === 409) {
-              state = new Error("409 - Error signing up");
-
-              break;
+              state = new Error("409 - User already exists. Please login.");
             } else {
               state = new Error(
                 "Something went wrong sending your magic link."
               );
             }
+            break;
 
           default:
             state = "idle";
+            break;
         }
       }
       await applyAction(result);
