@@ -2,7 +2,7 @@
   export let data;
 </script>
 
-<main class="flex flex-col grow px-10 bg-slate-900">
+<main class="flex flex-col grow px-10 bg-slate-900 -mt-[60px] pt-[60px]">
   <div class="flex flex-col gap-3 py-10">
     <div
       class="bg-slate-800 p-8 border border-slate-600 rounded-lg text-slate-400"

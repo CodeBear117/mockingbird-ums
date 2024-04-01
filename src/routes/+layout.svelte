@@ -18,7 +18,7 @@
 </script>
 
 <div class="flex flex-col min-h-screen">
-  <header class="bg-slate-800">
+  <header class="bg-slate-800/10 sticky top-0 backdrop-blur-sm">
     <nav
       class="flex items-center justify-between border-b border-border border-slate-600 h-[60px] px-10 py-2"
     >

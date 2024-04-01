@@ -38,7 +38,7 @@ export const actions: Actions = {
       .select('*')
       .eq('email', email)
 
-      // handle errors
+      // handle errors {rate limit exceeded} {no account}
       if (userError) {
         console.error('Error querying database:', userError.message);
         return fail(403, { message: 'No account associated with this email.' });
