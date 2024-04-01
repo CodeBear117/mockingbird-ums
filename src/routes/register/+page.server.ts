@@ -19,8 +19,7 @@ export const load: PageServerLoad = async ({locals: {getSession}}) => {
 // validate form inputs
 const RegistrationSchema = z.object({
   email: z.string().email(),
-  name: z.string().min(1, "Name is required").max(255, "surely your name isn't that.."),
-  password: z.string().min(8, "Password must be greater than 8 characters"),
+  name: z.string().min(1, "Name is required").max(255, "surely your name isn't that..")
 });
 
 // Supabase prescribes signUp()
@@ -33,17 +32,17 @@ export const actions: Actions = {
     if (!validation.success) {
       return fail(400, { fieldErrors: validation.error.flatten().fieldErrors });
     };
-    
 
-    const { email, name, password } = validation.data;
-    console.log(email, name, password); // check 
+    const { email, name} = validation.data;
  
     // query db
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('*')
       .eq('email', email) // filter results where email in db equals email from form
-
+    
+    console.log(userData)
+    
       // handle errors
       if (userError) {
         console.error('Error querying database:', userError.message);
@@ -68,7 +67,7 @@ export const actions: Actions = {
     // If there's an error with signing up, return an appropriate response
     if (signUpError) {
       console.error('Error signing up:', signUpError.message);
-      return fail(500, { message: signUpError.message });
+      return fail(409, { message: signUpError.message });
     };
     
     const { error: PostgrestError } = await supabase

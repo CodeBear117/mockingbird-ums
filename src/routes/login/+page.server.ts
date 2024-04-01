@@ -66,7 +66,7 @@ export const actions: Actions = {
     // handle error of link not sending
     if(signInError) {
         console.error('Error signing in:', signInError.message);
-        return fail(500, { message: signInError.message})
+        return fail(500, { message: signInError.message })
     }
 
     // else, return the email

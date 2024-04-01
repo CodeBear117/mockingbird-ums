@@ -22,17 +22,16 @@
             break;
 
           case "failure":
-            // check if reason was because email was not associated with account
-            if (
-              result.data?.error === "No account associated with this email."
-            ) {
-              window.location.href = "/register"; // Redirect to the registration page
+            // return error if email was not associated with account
+            if (result.status === 500) {
+              state = new Error(
+                "500, Error signing in: No account associated with that email, please register instead."
+              );
               return; // Exit early
-            } else if (result.data?.email) {
-              state = new Error(result.data.error);
-              break;
             } else {
-              state = new Error("something went wrong sending your magic link");
+              state = new Error(
+                "Something went wrong sending your magic link."
+              );
             }
 
           default:
@@ -45,10 +44,10 @@
 </script>
 
 <main
-  class="flex flex-col justify-center items-center w-full grow bg-slate-900"
+  class="flex flex-col justify-center items-center pt-10 w-full grow bg-slate-900"
 >
   <div
-    class="bg-slate-800 p-8 border border-slate-600 rounded-lg w-[90%] sm:w-[40%]"
+    class="bg-slate-800 px-8 py-10 border border-slate-600 rounded-lg w-[90%] sm:w-[40%]"
   >
     <h1
       class="font-bold text-3xl bg-gradient-to-r from-green-400 to-cyan-400 text-transparent bg-clip-text mb-3"
@@ -67,7 +66,7 @@
       class="flex flex-col justify-center"
     >
       <input
-        class="py-1 border rounded-lg text-center w-full mb-3"
+        class="py-1 rounded-lg text-center w-full mb-3 bg-slate-300 placeholder:text-slate-400 hover:bg-slate-200"
         type="email"
         name="email"
         placeholder="Your Email"
@@ -78,7 +77,7 @@
         >Send magic link!</button
       >
       {#if state instanceof Error}
-        <div>
+        <div class="text-red-500 pt-2">
           {state.message}
         </div>
       {:else if typeof state === "object" && state.email}

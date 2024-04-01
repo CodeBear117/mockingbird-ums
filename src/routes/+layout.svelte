@@ -1,7 +1,6 @@
 <script>
   import "../app.css";
   import Logo from "$lib/logo.svelte";
-  import { GradientButton } from "flowbite-svelte";
 
   export let data;
   let { supabase } = data;

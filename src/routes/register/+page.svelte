@@ -3,13 +3,10 @@
   import { applyAction, enhance } from "$app/forms";
   import type { ActionResult } from "@sveltejs/kit";
   import { Spinner } from "flowbite-svelte";
+  import { Result } from "postcss";
 
   // loading
-  type State =
-    | "idle"
-    | "loading"
-    | { name: string; email: string; password: string }
-    | Error;
+  type State = "idle" | "loading" | { name: string; email: string } | Error;
   let state: State = "idle";
 
   // handle form submit with visual loading indicator
@@ -23,7 +20,6 @@
               state = {
                 name: result.data.name,
                 email: result.data.email,
-                password: result.data.password,
               };
             } else {
               state = "idle";
@@ -31,16 +27,19 @@
             break;
 
           case "failure":
-            if (result.data?.email) {
-              state = new Error(result.data.error);
+            // return error if email associated with existing account
+            if (result.status === 409) {
+              state = new Error("409 - Error signing up");
+
               break;
             } else {
-              state = new Error("something went wrong sending your magic link");
+              state = new Error(
+                "Something went wrong sending your magic link."
+              );
             }
 
           default:
             state = "idle";
-            break;
         }
       }
       await applyAction(result);
@@ -49,10 +48,10 @@
 </script>
 
 <main
-  class="flex flex-col justify-center items-center w-full grow bg-slate-900"
+  class="flex flex-col justify-center items-center pt-10 w-full grow bg-slate-900"
 >
   <div
-    class="bg-slate-800 p-8 border border-slate-600 rounded-lg w-[90%] sm:w-[40%]"
+    class="bg-slate-800 px-8 py-10 border border-slate-600 rounded-lg w-[90%] sm:w-[40%]"
   >
     <h1
       class="font-bold text-3xl bg-gradient-to-r from-green-400 to-cyan-400 text-transparent bg-clip-text mb-3"
@@ -72,14 +71,14 @@
       class="flex flex-col justify-center"
     >
       <input
-        class="py-1 border rounded-lg text-center w-full mb-3"
+        class="py-1 rounded-lg text-center w-full mb-3 bg-slate-300 placeholder:text-slate-400 hover:bg-slate-200"
         type="name"
         name="name"
         placeholder="Your Name"
         required
       />
       <input
-        class="py-1 border rounded-lg text-center w-full mb-3"
+        class="py-1 rounded-lg text-center w-full mb-3 bg-slate-300 placeholder:text-slate-400 hover:bg-slate-200"
         type="email"
         name="email"
         placeholder="Your Email"
@@ -90,7 +89,7 @@
         >Submit</button
       >
       {#if state instanceof Error}
-        <div>
+        <div class="text-red-500 pt-2">
           {state.message}
         </div>
       {:else if typeof state === "object" && state.email}

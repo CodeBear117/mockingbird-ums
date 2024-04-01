@@ -13,8 +13,6 @@ export const GET = async (event) => {
   const type = url.searchParams.get('type') as EmailOtpType | null
   const next = url.searchParams.get('next') ?? '/dashboard'
 
-  // if both token hash and OTP are recieved
-  console.log('auth/confirm', {token_hash, type, next})
   if (token_hash && type) {
     // run server auth and obtain result of verification
     const { error } = await supabase.auth.verifyOtp({ token_hash, type })
