@@ -37,21 +37,12 @@ export const actions: Actions = {
       .from('users')
       .select('*')
       .eq('email', email)
-      
-      // check user data
-      //console.log(`serverside login check formData: ${formData}`)
-      //console.log(`serverside login check userData: ${userData}`)
 
       // handle errors
       if (userError) {
         console.error('Error querying database:', userError.message);
         return fail(403, { message: 'No account associated with this email.' });
       }
-      // if user does not exist in the DB, redirect to registration page
-      // else if (!userData || userData.length === 0) {
-      //   fail(404, { message: 'No account associated with this email. Please register.' });
-      //   //redirect(303, '/register')
-      // };
 
     // if userData exists for the attempted email, then send to Supabase for Auth
     const { error: signInError } = await supabase.auth.signInWithOtp({

@@ -40,9 +40,6 @@ export const actions: Actions = {
       .from('users')
       .select('email')
       .eq('email', email) // filter results where email in db equals email from form
-
-      // should return an email if it matched with one in the db
-      console.log(userData, userData?.length)
     
       // handle errors
       if (userError) {
@@ -55,7 +52,6 @@ export const actions: Actions = {
         return fail(409, { message: 'User already exists. Please login.' });
       };
     
-    // OPTION 2 - SIGN UP WITH OTP
     // if no errors (i.e the user does not already exist), send to Supabase for Auth
     const { error: signUpError } = await supabase.auth.signInWithOtp({
       email,
@@ -65,24 +61,41 @@ export const actions: Actions = {
       },
     });
 
+    // // function to add the user to the db
+    // async function addUserToDatabase() {
+    //   const { error } = await supabase
+    //     .from("users")
+    //     .insert(
+    //       { 'name': result.name, 'email': email } // type errors here
+    //     );
+    //   if (error) {
+    //     console.error(
+    //       "Error adding user to database:",
+    //       error.message
+    //     );
+    //     // Handle error
+    //   } else {
+    //     console.log("user added");
+    //   }
+    // }
+
+    // //ensure user is authenticated before db INSERT
+    // supabase.auth.onAuthStateChange(async (event, session) => {
+    //   // if so, add user to the db
+    //   if (event === "SIGNED_IN") {
+    //     console.log("SIGNED_IN", session);
+    //     await addUserToDatabase();
+    //   }
+    // });
+    
+
     // If there's an error with signing up, return an appropriate response
     if (signUpError) {
       console.error('Error signing up:', signUpError.message);
       return fail(500, { message: signUpError.message });
     };
-    
-    const { error: PostgrestError } = await supabase
-    .from('users')
-    .insert(
-      { name: name, email: email},
-    )
-
-    if (PostgrestError) {
-      console.error('Error signing up:', PostgrestError.message);
-      return fail(500, { message: PostgrestError.message });
-    };
 
     // else, return confirmation
-    return { message: 'Registration successful!' };
+    return { message: 'Registration successful!', name, email };
   }
 }

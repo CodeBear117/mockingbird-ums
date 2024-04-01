@@ -3,7 +3,6 @@
   import { applyAction, enhance } from "$app/forms";
   import type { ActionResult } from "@sveltejs/kit";
   import { Spinner } from "flowbite-svelte";
-  import { Result } from "postcss";
 
   // loading
   type State = "idle" | "loading" | { name: string; email: string } | Error;
@@ -27,15 +26,15 @@
             break;
 
           case "failure":
-            // return error if email associated with existing account
             if (result.status === 500) {
               state = new Error("500 - Error signing up");
             }
+            // return error if email associated with existing account
             if (result.status === 409) {
               state = new Error("409 - User already exists. Please login.");
             } else {
               state = new Error(
-                "Something went wrong sending your magic link."
+                "Something went wrong" // need to target specific errors
               );
             }
             break;
