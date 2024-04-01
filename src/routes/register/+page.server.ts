@@ -61,33 +61,18 @@ export const actions: Actions = {
       },
     });
 
-    // // function to add the user to the db
-    // async function addUserToDatabase() {
-    //   const { error } = await supabase
-    //     .from("users")
-    //     .insert(
-    //       { 'name': result.name, 'email': email } // type errors here
-    //     );
-    //   if (error) {
-    //     console.error(
-    //       "Error adding user to database:",
-    //       error.message
-    //     );
-    //     // Handle error
-    //   } else {
-    //     console.log("user added");
-    //   }
-    // }
+    // this is poorly done, but in the absense of time, it had to be implemented,     
+    const { data: tableData, error: postGrestError } = await supabase
+    .from('users')
+    .update({ email: email, name: name })
+    .is('email', null)
 
-    // //ensure user is authenticated before db INSERT
-    // supabase.auth.onAuthStateChange(async (event, session) => {
-    //   // if so, add user to the db
-    //   if (event === "SIGNED_IN") {
-    //     console.log("SIGNED_IN", session);
-    //     await addUserToDatabase();
-    //   }
-    // });
-    
+    console.log(tableData)
+
+    if (postGrestError) {
+      console.error('Error storing temporary user data:', postGrestError.message);
+      return fail(500, { message: 'Error processing your registration.' });
+    }
 
     // If there's an error with signing up, return an appropriate response
     if (signUpError) {
@@ -96,6 +81,6 @@ export const actions: Actions = {
     };
 
     // else, return confirmation
-    return { message: 'Registration successful!', name, email };
+    return { message: 'Registration successful!' };
   }
 }
