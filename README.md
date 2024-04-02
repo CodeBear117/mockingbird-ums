@@ -1,6 +1,6 @@
 # mockingbird-ums
 
-01-04-2024
+02-04-2024
 
 ## Local Installation & development
 
@@ -11,6 +11,7 @@
    ```
 
 2. Open your code editor and open the folder you created.
+
 3. Open your terminal, ensuring that you are in the project's dir. Run the following command to install the project's dependencies:
 
    ```bash
@@ -19,15 +20,20 @@
 
    \*(or `pnpm install` or `yarn`)
 
-4. Start a development server:
+4. Configure Supabase:
+
+   - Create and account as well as a new database and a project.
+   - Update the `DATABASE_URL`, `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY` in the `.env` file with your project's data from Supabase. These keys can be found in your Supabase project's `API Settings`.
+   - Update the `SiteURL` and `Redirect URLS` in the `Authentication` > `URL Configuration settings`.
+   - Add an STMP server for Supabase to avoid email rate limiting (optional).
+
+5. Start a development server locally, ensure that it is same URL as your `SiteURL` in Supabase:
 
    ```bash
    npm run dev
    ```
 
-5. Add an STMP server for Supabase to avoid email rate limiting (optional)
-
-6. Start Supabase CLI (optional)
+6. Start Supabase CLI (optional).
 
    - install Docker then run:
 
@@ -87,7 +93,7 @@ supabase.auth.signUp
 
 I tried both methods.
 
-My reason for trying the `supabase.auth.signInWithOtp` method was that I wanted the form to be simple, passwordless and filled only once. I realised that the user's data did NOT get populated in the `user` table on Supabase, instead, it is populated in an `auth.users` table. This meant that a new row in the users has `ID` and `created_at` column data but no `email` or `name` data. This would result in the user getting logged in, but also not being able to see the protected `/dashboard`, which returned a `500 - internal error`. I tested multiple potential solutions:
+My reason for trying the `supabase.auth.signInWithOtp` method was that I wanted the form to be simple and passwordless. I realised that the user's data did not get populated in the `user` table on Supabase, instead, it is populated in an `auth.users` table. This meant that a new row in the users has `ID` and `created_at` column data but no `email` or `name` data. This would result in the user getting logged in, but also not being able to see the protected `/dashboard`, which returned a `500 - internal error`. I tested multiple potential solutions including:
 
 - Waiting for the session to change to 'authenticated' before posting the data as an `INSERT` to the users table.
 
@@ -99,9 +105,9 @@ This failed because I realised later that it was a client-side method and I ws t
 
 - Creating a second table `backup` and related to the `users` based on the `ID`, posting the form data to this `backup` table, and then updating the `users` table based on the relation. This method essentially created a duplicate table and I did not deem it useful or productive.
 
-- I then tried the `supabase.auth.signUp` method. This method has a drawback because the user has to provide a password on top of their email and name (which were the original requirements of the registration form/page for this task).
+- I then tried the `supabase.auth.signUp` method. This method has a drawback because the user has to provide a password on top of their email and name (which was not the original requirements of the registration form/page for this task).
 
-Upon further consideration, I realised that my first approach might have worked if I had used an SQL query to populate the `users` table with any new rows added to the `auth.data` table. I wrote the following query:
+Upon further consideration, I realised that my first approach might have worked if I had used an SQL query to populate the `users` table with any new rows added to the `auth.users` table. I wrote the following query, which would trigger when a new user was added to the `auth.users` table. The function adds the new user from the `auth.users` table into the `users` table after applying certain row level security (RLS) policies:
 
 ```bash
 create table
