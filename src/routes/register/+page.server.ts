@@ -35,14 +35,14 @@ export const actions: Actions = {
     };
 
     const { name, email, password} = validation.data;
-    console.log(`registration form data sent for auth: ${JSON.stringify(validation)}`)
+    //console.log(`registration form data sent for auth: ${JSON.stringify(validation)}`)
 
     // query db
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('email')
       .eq('email', email); // filter results where email in db equals email from form
-    console.log(`database check for existing user (should not exist): ${userData}`)
+    //console.log(`database check for existing user (should not exist): ${userData}`)
 
       // handle errors
       if (userError) {
@@ -54,17 +54,6 @@ export const actions: Actions = {
       if (userData.length > 0) {
         return fail(409, { message: 'SERVER User already exists. Please login.' });
       };
-    
-    // METHOD 1: SUPABASE.AUTH.SIGNINWITHOTP + SHOULDCREATEUSER=TRUE
-    // if no errors (i.e the user does not already exist), send to Supabase for Auth
-    // const { data: { user: userAuthData, session: sessionData }, error: signUpError } = await supabase.auth.signInWithOtp({
-    //   email,
-    //   options: {
-    //     // set this to false if you do not want the user to be automatically signed up
-    //     shouldCreateUser: true,
-    //     // emailRedirectTo: `${url.origin}/dashboard`
-    //   },
-    // });
 
     // METHOD 2: SUPABASE.AUTH.SIGNUP
     // if no errors (i.e the user does not already exist), send to Supabase for Auth
@@ -80,18 +69,7 @@ export const actions: Actions = {
       }
     )
 
-    console.log(`Data sent to Supabase for sign up: ${userAuthData}, ${sessionData}`)
-
-    // // this is poorly done, but in the absense of time, it had to be implemented,     
-    // const { data: tableData, error: postGrestError } = await supabase
-    // .from('users')
-    // .update({ email: email, name: name })
-    // .is('email', null)
-
-    // if (postGrestError) {
-    //   console.error('SERVER Error storing temporary user data:', postGrestError.message);
-    //   return fail(500, { message: 'SERVER Error processing your registration.' });
-    // }
+    //console.log(`Data sent to Supabase for sign up: ${userAuthData}, ${sessionData}`)
 
     // If there's an error with signing up, return an appropriate response
     if (AuthError) {
