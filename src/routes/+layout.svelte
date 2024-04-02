@@ -6,13 +6,13 @@
   let { supabase } = data;
   $: ({ supabase } = data);
 
+  // sign out
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
       window.location.href = "/";
     } catch (error) {
-      console.error("Error signing out:", error);
-      // Handle the error appropriately
+      //console.error("Error signing out:", error);
     }
   };
 </script>

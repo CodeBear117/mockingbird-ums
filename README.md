@@ -25,7 +25,9 @@
    npm run dev
    ```
 
-5. Start Supabase CLI (optional)
+5. Add an STMP server for Supabase to avoid email rate limiting (optional)
+
+6. Start Supabase CLI (optional)
 
    - install Docker then run:
 

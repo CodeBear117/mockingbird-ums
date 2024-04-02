@@ -11,11 +11,8 @@ declare global {
 			supabase: SupabaseClient // read from CreateServerClient function types in hooks.server.ts
 			getSession: () => Promise<Session | null> 
 			getUser: () => Promise<User | null>
-		}
-		// interface PageData {}
-		// interface PageState {}
-		// interface Platform {}
-	}
-}
+		};
+	};
+};
 
 export {};

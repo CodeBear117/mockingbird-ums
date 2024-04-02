@@ -5,16 +5,21 @@
 <main class="flex flex-col grow px-10 bg-slate-900 -mt-[60px] pt-[60px]">
   <div class="flex flex-col gap-3 py-10">
     <div
-      class="bg-slate-800 p-8 border border-slate-600 rounded-lg text-slate-400"
+      class="bg-slate-800 p-8 border border-slate-600 rounded-lg text-slate-400 flex justify-between items-center"
     >
       {#if data.user}
-        <p>
+        <p class="text-sm md:text-base">
           You are currently logged in as <span class="text-teal-400"
             >{data.user.email}</span
           >
         </p>
+        <a
+          href="/dashboard"
+          class="bg-gradient-to-r from-green-400 to-cyan-400 border-0 rounded-lg hover:from-cyan-400 hover:to-green-400 text-white py-1 px-6 text-sm md:text-base"
+          >View Dashboard</a
+        >
       {:else}
-        <p>You are not logged in!</p>
+        <p class="text-sm md:text-base">You are not logged in!</p>
       {/if}
     </div>
     <div
@@ -45,8 +50,8 @@
       <p class="pb-3">
         Given that I come from a background predominently in front-end
         developement, I found aspects of the authentication flow and handling
-        challenging, but as I will hopefully demonstrate here, that is was
-        nothing I couldn't learn quickly and handle!
+        challenging, but as I will hopefully demonstrate here, that was nothing
+        I couldn't learn quickly and handle! Read more on GitHub!
       </p>
       <h2 class="text-lg font-bold">Links</h2>
       <p class="pb-3">

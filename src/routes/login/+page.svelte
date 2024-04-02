@@ -6,10 +6,12 @@
 
   // loading
   type State = "idle" | "loading" | { email: string } | Error;
+
   let state: State = "idle";
 
   const handleSubmit = () => {
     state = "loading";
+
     return async ({ result }: { result: ActionResult }) => {
       if (browser) {
         switch (result.type) {
@@ -33,11 +35,14 @@
                 "Something went wrong sending your magic link."
               );
             }
+            break;
 
           default:
             state = "idle";
+            break;
         }
       }
+
       await applyAction(result);
     };
   };
