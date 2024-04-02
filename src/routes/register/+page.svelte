@@ -5,7 +5,7 @@
   import { Spinner } from "flowbite-svelte";
 
   // loading
-  type State = "idle" | "loading" | { name: string; email: string } | Error;
+  type State = "idle" | "loading" | { email: string } | Error; // name and password
   let state: State = "idle";
 
   // handle form submit with visual loading indicator
@@ -15,10 +15,10 @@
       if (browser) {
         switch (result.type) {
           case "success":
-            if (result.data?.email && result.data?.name) {
+            if (result.data?.email) {
+              // if the result is a success, it might be too late the 'email sent' notification (i.e. the user is already registered)
               state = {
-                name: result.data.name,
-                email: result.data.email,
+                email: result.data.email, // name, password
               };
             } else {
               state = "idle";
@@ -50,7 +50,7 @@
 </script>
 
 <main
-  class="flex flex-col justify-center items-center pt-10 w-full grow bg-slate-900"
+  class="flex flex-col justify-center items-center -mt-[60px] pt-[70px] w-full grow bg-slate-900"
 >
   <div
     class="bg-slate-800 px-8 py-10 border border-slate-600 rounded-lg w-[90%] sm:w-[40%]"
@@ -86,6 +86,13 @@
         placeholder="Your Email"
         required
       />
+      <input
+        class="py-1 rounded-lg text-center w-full mb-3 bg-slate-300 placeholder:text-slate-400 hover:bg-slate-200"
+        type="password"
+        name="password"
+        placeholder="Your Password"
+        required
+      />
       <button
         class="bg-gradient-to-r from-green-400 to-cyan-400 py-2 border-0 rounded-lg hover:from-cyan-400 hover:to-green-400 text-white"
         >Submit</button
@@ -97,6 +104,7 @@
       {:else if typeof state === "object" && state.email}
         <div class="text-teal-400 pt-2">
           We sent an email to {state.email} - Check your Inbox!
+          <!-- Registration confirmed, please login. -->
         </div>
       {:else if state === "loading"}
         <div class="pt-4">

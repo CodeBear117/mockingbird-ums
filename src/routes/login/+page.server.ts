@@ -2,10 +2,10 @@ import type { Actions, PageServerLoad } from './$types'
 import { fail, redirect } from '@sveltejs/kit';
 import z from 'zod';
 
-export const load: PageServerLoad = async ({locals: {getSession}}) => {
-  const session = await getSession()
+export const load: PageServerLoad = async ({locals: {getUser}}) => { //getSession
+  const user = await getUser() // getSession
   // if you are already in an authenticated session, redirect to the dashboard
-  if (session) {
+  if (user) {
     redirect(303, '/dashboard')
   }
   return {
@@ -31,12 +31,14 @@ export const actions: Actions = {
     
     // use email to query db
     const email = validation.data;
+    console.log(`login form data sent for auth: ${email}`)
 
     // check if the inputted email exists in the db already
-    const { error: userError } = await supabase
+    const { data: userData, error: userError } = await supabase
       .from('users')
       .select('*')
-      .eq('email', email)
+      .eq('email', email);
+    console.log(`database check for existing user (should exist): ${userData}`)
 
       // handle errors {rate limit exceeded} {no account}
       if (userError) {
@@ -45,7 +47,7 @@ export const actions: Actions = {
       }
 
     // if userData exists for the attempted email, then send to Supabase for Auth
-    const { error: signInError } = await supabase.auth.signInWithOtp({
+    const { data: {user: userAuthData, session: sessionData}, error: signInError } = await supabase.auth.signInWithOtp({
         email,
         options: {
           // set this to false if you do not want the user to be automatically signed up
@@ -53,6 +55,7 @@ export const actions: Actions = {
           emailRedirectTo: `${url.origin}/dashboard`
         },
     });
+    console.log(`Data sent to Supabase for sign in: ${userAuthData}, ${sessionData}`)
 
     // handle error of link not sending
     if(signInError) {

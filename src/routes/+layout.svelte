@@ -24,7 +24,7 @@
     >
       <Logo />
       <div class="flex gap-4 items-center">
-        {#if data.session}
+        {#if data.user}
           <button
             class="bg-slate-700 hover:bg-slate-600 py-1 px-6 border-0 rounded-lg text-slate-400"
             on:click={handleSignOut}>Logout</button

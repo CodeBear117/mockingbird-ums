@@ -44,7 +44,7 @@
 </script>
 
 <main
-  class="flex flex-col justify-center items-center pt-10 w-full grow bg-slate-900"
+  class="flex flex-col justify-center items-center -mt-[60px] pt-[70px] w-full grow bg-slate-900"
 >
   <div
     class="bg-slate-800 px-8 py-10 border border-slate-600 rounded-lg w-[90%] sm:w-[40%]"

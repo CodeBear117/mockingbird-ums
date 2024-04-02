@@ -7,10 +7,10 @@
     <div
       class="bg-slate-800 p-8 border border-slate-600 rounded-lg text-slate-400"
     >
-      {#if data.session}
+      {#if data.user}
         <p>
           You are currently logged in as <span class="text-teal-400"
-            >{data.session.user.email}</span
+            >{data.user.email}</span
           >
         </p>
       {:else}

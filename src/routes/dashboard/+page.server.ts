@@ -1,17 +1,19 @@
 import { redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
  
-export const load: PageServerLoad = async ({locals: {getSession, supabase}}) => {
-  const session = await getSession()
+export const load: PageServerLoad = async ({locals: {getUser, supabase}}) => {
+  const user = await getUser()
   // if you are not logged in, redirect to login page
-  if (!session) {
+  if (!user) {
     redirect(303, '/login')
   }
+  console.log(`Dashboard check for session: ${user}`)
 
   // Fetch all users from the database
   const { data: users, error } = await supabase
     .from('users')
     .select('*');
+  console.log(`Database users table data received: ${users}`)
 
   if (error) {
     console.error('Error fetching users:', error);
@@ -19,8 +21,11 @@ export const load: PageServerLoad = async ({locals: {getSession, supabase}}) => 
   }
 
   // Also fetch the name of the currently logged in user
-  const userEmail = session.user.email;
+  const userEmail = user.email; // session.user.email
   const loggedInUser = users.find(user => user.email === userEmail);
+
+  console.log(`Dashoard recognises current user email from database: ${userEmail}`)
+  console.log(`Dashoard recognises current user from database: ${loggedInUser}`)
 
   // handle type error on 'name' - developement only - remove block when registration works
   if (!loggedInUser) {

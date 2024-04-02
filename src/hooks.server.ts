@@ -1,4 +1,4 @@
-// this code will run before every req on the backend
+// this code will run before every req on the backend (Supabase)
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
 import { createServerClient } from '@supabase/ssr'
@@ -8,12 +8,6 @@ export const handle: Handle = async ({ event, resolve }) => {
   event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
     cookies: {
       get: (key) => event.cookies.get(key),
-      /**
-       * Note: You have to add the `path` variable to the
-       * set and remove method due to sveltekit's cookie API
-       * requiring this to be set, setting the path to an empty string
-       * will replicate previous/standard behaviour (https://kit.svelte.dev/docs/types#public-types-cookies)
-       */
       set: (key, value, options) => {
         event.cookies.set(key, value, { ...options, path: '/' })
       },
@@ -28,18 +22,29 @@ export const handle: Handle = async ({ event, resolve }) => {
    * of calling `const { data: { session } } = await supabase.auth.getSession()`
    * you just call this `await getSession()`
    */
+  event.locals.getUser = async () => {
+    const {
+      data: { user }, // session
+    } = await event.locals.supabase.auth.getUser() // session
+    // check data
+    console.log(`hooks.server.ts - getUser check: ${user}`)
+    return user // session
+  }
+
   event.locals.getSession = async () => {
     const {
-      data: { session },
-    } = await event.locals.supabase.auth.getSession()
+      data: { session }, // session
+    } = await event.locals.supabase.auth.getSession() // session
     // check data
-    //console.log(session?.user)
-    return session
+    console.log(`hooks.server.ts - getSession check: ${session}`)
+    return session // session
   }
 
   return resolve(event, {
     filterSerializedResponseHeaders(name) {
-      return name === 'content-range'
+      const allowedHeaders = ['content-range', 'x-supabase-api-version'];
+      return allowedHeaders.includes(name);
+      //return name === 'content-range'
     },
   })
 }

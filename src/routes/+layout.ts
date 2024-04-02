@@ -14,18 +14,23 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
     cookies: {
       get(key) {
         if (!isBrowser()) {
-          return JSON.stringify(data.session)
+          return JSON.stringify(data.user) // session
         }
 
         const cookie = parse(document.cookie)
         return cookie[key]
       },
     },
-  })
+  });
 
+  const { 
+    data: { user }, 
+  } = await supabase.auth.getUser();
+  
   const {
     data: { session },
   } = await supabase.auth.getSession()
 
-  return { supabase, session }
+  console.log(`Load function for all pages: ${supabase} ${user} ${session} `)
+  return { supabase, session, user } // session
 }

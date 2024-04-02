@@ -28,7 +28,7 @@
   );
 </script>
 
-<main class="flex flex-col pt-10 px-10 grow bg-slate-900">
+<main class="flex flex-col -mt-[60px] pt-[90px] px-10 grow bg-slate-900">
   <div class="bg-white p-8 border border-gray-300 rounded-lg">
     <p class="font-bold text-3xl px-5">
       Welcome, <span
