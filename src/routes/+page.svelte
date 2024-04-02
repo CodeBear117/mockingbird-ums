@@ -3,19 +3,19 @@
 </script>
 
 <main class="flex flex-col grow px-10 bg-slate-900 -mt-[60px] pt-[60px]">
-  <div class="flex flex-col gap-3 py-10">
+  <div class="flex flex-col gap-3 py-10 min-w-60">
     <div
-      class="bg-slate-800 p-8 border border-slate-600 rounded-lg text-slate-400 flex justify-between items-center"
+      class="bg-slate-800 p-8 border border-slate-600 rounded-lg text-slate-400 flex flex-col justify-between items-center sm:flex-row"
     >
       {#if data.user}
-        <p class="text-sm md:text-base">
+        <p class="text-sm mb-3 sm:mb-0 text-center sm:text-left md:text-base">
           You are currently logged in as <span class="text-teal-400"
             >{data.user.email}</span
           >
         </p>
         <a
           href="/dashboard"
-          class="bg-gradient-to-r from-green-400 to-cyan-400 border-0 rounded-lg hover:from-cyan-400 hover:to-green-400 text-white py-1 px-6 text-sm md:text-base"
+          class="bg-gradient-to-r from-green-400 to-cyan-400 border-0 rounded-lg hover:from-cyan-400 hover:to-green-400 text-white text-center py-1 px-6 text-sm md:text-base"
           >View Dashboard</a
         >
       {:else}

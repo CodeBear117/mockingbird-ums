@@ -28,19 +28,21 @@
   );
 </script>
 
-<main class="flex flex-col -mt-[60px] pt-[90px] px-10 grow bg-slate-900">
+<main
+  class="flex flex-col -mt-[60px] pt-[90px] px-10 grow bg-slate-900 min-w-80"
+>
   <div class="bg-slate-800 p-8 border border-slate-600 rounded-lg">
-    <p class="font-bold text-3xl px-5 text-slate-400 pb-4">
+    <p class="font-bold text-xl sm:text-2xl md:text-3xl text-slate-400 pb-4">
       Welcome, <span
         class="bg-gradient-to-r from-green-400 to-cyan-400 text-transparent bg-clip-text"
         >{data.userName}</span
       >
     </p>
     {#if data.users && data.users.length > 0}
-      <Table striped={true} shadow noborder class="bg-slate-700">
+      <Table striped={true} shadow noborder={true} class="bg-slate-700">
         <TableSearch
           classInput="bg-slate-300 placeholder:text-slate-400 hover:bg-slate-200"
-          placeholder="Search"
+          placeholder="Search by name"
           hoverable={true}
           bind:inputValue={searchTerm}
         >
