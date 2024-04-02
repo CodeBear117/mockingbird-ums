@@ -22,7 +22,7 @@
 
 4. Configure Supabase:
 
-   - Create and account as well as a new database and a project.
+   - Create an account as well as a new database and a project.
    - Update the `DATABASE_URL`, `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY` in the `.env` file with your project's data from Supabase. These keys can be found in your Supabase project's `API Settings`.
    - Update the `SiteURL` and `Redirect URLS` in the `Authentication` > `URL Configuration settings`.
    - Add an STMP server for Supabase to avoid email rate limiting (optional).

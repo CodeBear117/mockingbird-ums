@@ -29,21 +29,22 @@
 </script>
 
 <main class="flex flex-col -mt-[60px] pt-[90px] px-10 grow bg-slate-900">
-  <div class="bg-white p-8 border border-gray-300 rounded-lg">
-    <p class="font-bold text-3xl px-5">
+  <div class="bg-slate-800 p-8 border border-slate-600 rounded-lg">
+    <p class="font-bold text-3xl px-5 text-slate-400 pb-4">
       Welcome, <span
         class="bg-gradient-to-r from-green-400 to-cyan-400 text-transparent bg-clip-text"
         >{data.userName}</span
       >
     </p>
     {#if data.users && data.users.length > 0}
-      <Table striped={true}>
+      <Table striped={true} shadow noborder class="bg-slate-700">
         <TableSearch
+          classInput="bg-slate-300 placeholder:text-slate-400 hover:bg-slate-200"
           placeholder="Search"
           hoverable={true}
           bind:inputValue={searchTerm}
         >
-          <TableHead>
+          <TableHead class="text-xs text-slate-400 uppercase bg-slate-600">
             <TableHeadCell>ID</TableHeadCell>
             <TableHeadCell>Name</TableHeadCell>
             <TableHeadCell>Email</TableHeadCell>
@@ -51,11 +52,16 @@
           </TableHead>
           <TableBody>
             {#each filteredItems as user}
-              <TableBodyRow>
-                <TableBodyCell>{user.id}</TableBodyCell>
-                <TableBodyCell>{user.name}</TableBodyCell>
-                <TableBodyCell>{user.email}</TableBodyCell>
-                <TableBodyCell>{user.created_at}</TableBodyCell>
+              <TableBodyRow class="bg-slate-700 hover:bg-slate-600">
+                <TableBodyCell class="text-slate-400">{user.id}</TableBodyCell>
+                <TableBodyCell class="text-slate-400">{user.name}</TableBodyCell
+                >
+                <TableBodyCell class="text-slate-400"
+                  >{user.email}</TableBodyCell
+                >
+                <TableBodyCell class="text-slate-400"
+                  >{user.created_at}</TableBodyCell
+                >
               </TableBodyRow>
             {/each}
           </TableBody>
