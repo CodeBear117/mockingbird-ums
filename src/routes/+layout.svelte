@@ -20,7 +20,7 @@
 <div class="flex flex-col min-h-screen">
   <header class="bg-slate-800/10 sticky top-0 backdrop-blur-sm z-10">
     <nav
-      class="flex items-center justify-between border-b border-border border-slate-600 h-[60px] px-10 py-2 min-w-60 gap-5"
+      class="flex items-center justify-between border-b border-border border-slate-600 h-[60px] px-5 py-2 min-w-60 gap-5"
     >
       <Logo />
       <div class="flex gap-4 items-center">

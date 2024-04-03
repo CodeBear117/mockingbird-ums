@@ -29,7 +29,7 @@
 </script>
 
 <main
-  class="flex flex-col -mt-[60px] pt-[90px] px-10 grow bg-slate-900 min-w-80"
+  class="flex flex-col -mt-[60px] pt-[90px] px-5 grow bg-slate-900 min-w-80"
 >
   <div class="bg-slate-800 p-8 border border-slate-600 rounded-lg">
     <p class="font-bold text-xl sm:text-2xl md:text-3xl text-slate-400 pb-4">

@@ -5,20 +5,21 @@
   import { Spinner } from "flowbite-svelte";
 
   // loading
-  type State = "idle" | "loading" | { email: string } | Error; // name and password
+  type State = "idle" | "loading" | { email: string } | Error;
   let state: State = "idle";
 
   // handle form submit with visual loading indicator
   const handleSubmit = () => {
     state = "loading";
+
     return async ({ result }: { result: ActionResult }) => {
       if (browser) {
         switch (result.type) {
           case "success":
+            // set state with email for UI notification
             if (result.data?.email) {
-              // if the result is a success, it might be too late the 'email sent' notification (i.e. the user is already registered)
               state = {
-                email: result.data.email, // name, password
+                email: result.data.email,
               };
             } else {
               state = "idle";
@@ -104,7 +105,6 @@
       {:else if typeof state === "object" && state.email}
         <div class="text-teal-400 pt-2">
           We sent an email to {state.email} - Check your Inbox!
-          <!-- Registration confirmed, please login. -->
         </div>
       {:else if state === "loading"}
         <div class="pt-4">

@@ -2,19 +2,22 @@ import type { Actions, PageServerLoad } from './$types'
 import { fail, redirect } from '@sveltejs/kit';
 import z from 'zod';
 
-export const load: PageServerLoad = async ({locals: { getUser }}) => { // getSession
-  const user = await getUser() // getSession
+export const load: PageServerLoad = async ({locals: { getUser }}) => {
+
+  const user = await getUser()
+
   // if you are already in an authenticated session, redirect to the dashboard
   if (user) {
-    redirect(303, '/dashboard')
-  }
+    redirect(303, '/dashboard');
+  };
+
   return {
     meta: {
       title: 'Register',
       description: 'Register to the Mockingbird-ums'
     },
-  }
-}
+  };
+};
 
 // validate form inputs
 const RegistrationSchema = z.object({
@@ -28,8 +31,11 @@ export const actions: Actions = {
 
   // action: register based on form action
   register: async ({request, url, locals: { supabase }}) => {
+
     const formData = await request.formData();
+
     const validation = RegistrationSchema.safeParse(Object.fromEntries(formData));
+
     if (!validation.success) {
       return fail(400, { fieldErrors: validation.error.flatten().fieldErrors });
     };
@@ -55,7 +61,6 @@ export const actions: Actions = {
         return fail(409, { message: 'SERVER User already exists. Please login.' });
       };
 
-    // METHOD 2: SUPABASE.AUTH.SIGNUP
     // if no errors (i.e the user does not already exist), send to Supabase for Auth
     const { data: { user: userAuthData, session: sessionData }, error: AuthError } = await supabase.auth.signUp(
       {
@@ -67,7 +72,7 @@ export const actions: Actions = {
           }
         }
       }
-    )
+    );
 
     //console.log(`Data sent to Supabase for sign up: ${userAuthData}, ${sessionData}`)
 
@@ -80,4 +85,4 @@ export const actions: Actions = {
     // else, return confirmation
     return { email, message: 'Registration successful!' };
   }
-}
+};

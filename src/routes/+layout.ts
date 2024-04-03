@@ -25,6 +25,7 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
     },
   });
 
+  // Supabase recommends getUser over getSession for security
   const { 
     data: { user }, 
   } = await supabase.auth.getUser();

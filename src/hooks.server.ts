@@ -40,9 +40,12 @@ export const handle: Handle = async ({ event, resolve }) => {
   };
 
   return resolve(event, {
+
     filterSerializedResponseHeaders(name) {
+
       // headers allow getUser to work correctly
       const allowedHeaders = ['content-range', 'x-supabase-api-version'];
+      
       return allowedHeaders.includes(name);
       //return name === 'content-range'
     },
