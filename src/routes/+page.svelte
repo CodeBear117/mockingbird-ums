@@ -7,7 +7,7 @@
 >
   <div class="flex flex-col gap-3 py-10 min-w-60">
     <div
-      class="bg-slate-800 p-8 border border-slate-600 rounded-lg text-slate-400 flex flex-col justify-between items-center sm:flex-row"
+      class="bg-slate-800 p-4 md:px-8 py-8 border border-slate-600 rounded-lg text-slate-400 flex flex-col justify-between items-center sm:flex-row"
     >
       {#if data.user}
         <p class="text-sm mb-3 sm:mb-0 text-center sm:text-left md:text-base">
@@ -25,7 +25,7 @@
       {/if}
     </div>
     <div
-      class="bg-slate-800 p-8 border border-slate-600 rounded-lg text-slate-400"
+      class="bg-slate-800 p-4 md:px-8 py-8 border border-slate-600 rounded-lg text-slate-400"
     >
       <h1 class="text-2xl font-bold pb-3">Welcome to the Mockingbird UMS</h1>
       <h2 class="text-lg font-bold">Introduction</h2>
